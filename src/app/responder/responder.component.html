@@ -1,0 +1,49 @@
+<div class="d-flex align-items-center justify-content-center vh-100 fondo">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7 col-sm-9">
+                <div class="card p-4 shadow card-container">
+                    <h2 class="text-center">Responder Formulario</h2>
+
+                    <!-- Mensajes emergentes -->
+                    <div *ngFor="let message of messages" class="position-relative">
+                        <div class="alert alert-{{ message.category }} alert-dismissible fade show" role="alert">
+                            {{ message.text }}
+                        </div>
+                    </div>
+
+                    <!-- Formulario para responder preguntas -->
+                    <form [formGroup]="formularioForm" (ngSubmit)="onSubmit()">
+                        <div formArrayName="respuestas">
+                            <!-- Iterar sobre el arreglo de respuestas -->
+                            <div *ngFor="let respuesta of respuestas.controls; let i = index" [formGroupName]="i" class="mb-3 p-3 bg-light border rounded">
+                                <!-- Mostrar la pregunta -->
+                                <label>{{ questions[i]?.pregunta }}</label>
+
+                                <!-- Input para preguntas de texto -->
+                                <div *ngIf="questions[i]?.tipo === 'texto'">
+                                    <input type="text" formControlName="respuesta" class="form-control mb-2" placeholder="Tu respuesta">
+                                </div>
+
+                                <!-- Select para preguntas de selección múltiple -->
+                                <div *ngIf="questions[i]?.tipo === 'multiple'">
+                                    <select formControlName="respuesta" class="form-select form-select-sm mb-2" aria-label="Tipo de respuesta">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="si">Sí</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botón de enviar -->
+                        <div class="form-group mt-3">
+                            <button type="submit" class="btn btn-primary">Enviar Respuestas</button> <br>
+                            <a routerLink="/opciones" class="btn btn-link">Volver</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,115 @@
+<div class="d-flex align-items-center vh-100">
+    <div class="container-fluid flex-column">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 col-sm-12">
+                <ng-container *ngIf="messages.length > 0">
+                    <div class="alert alert-info alert-dismissible fade show" role="alert" *ngFor="let message of messages">
+                        {{ message }}
+                    </div>
+                </ng-container>
+
+                <div class="row">
+                    <div class="col-12 d-flex">
+                        <a data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary ms-auto mt-4">Crear formulario</a>
+                        <!--<routerLink="/crear-formulario" -->
+
+                    </div>
+                </div>
+
+                <br>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Usuario Creador</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Estatus</th>
+                            <th scope="col">Editar</th>
+                            <th scope="col">Contestar</th>
+                            <th scope="col">URL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let formulario of formularios; let i = index">
+                            <th scope="row">{{ i + 1 }}</th>
+                            <td>{{ formulario.nombre }}</td>
+                            <td>{{ formulario.usuarioCreador }}</td>
+                            <td>{{ formulario.fecha | date:'shortDate' }}</td>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="flexCheckIndeterminate{{i}}" [(ngModel)]="formulario.activo" (change)="toggleStatus(formulario)">
+                                    <label class="form-check-label" for="flexCheckIndeterminate{{i}}">
+                                        {{ formulario.activo ? 'Activo' : 'Baja' }}
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <a routerLink="/editar-formulario/{{ formulario.id }}" [style.pointerEvents]="formulario.activo ? 'auto' : 'none'">
+                                    <i class="bi bi-pencil-square" [style.opacity]="formulario.activo ? 1 : 0.5"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a [routerLink]="['/responder']" [style.pointerEvents]="formulario.activo ? 'auto' : 'none'">
+                                    <i class="bi bi-pencil" [style.opacity]="formulario.activo ? 1 : 0.5"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <button (click)="compartirFormulario(formulario.id)" class="btn btn-link" [style.pointerEvents]="formulario.activo ? 'auto' : 'none'">
+                                  <i class="bi bi-share" [style.opacity]="formulario.activo ? 1 : 0.5">Compartir</i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="d-grid gap-2">
+                    <a routerLink="/visualizar-respuesta" class="btn btn-primary mx-auto">Visualizar respuestas</a>
+                </div>
+                <div class="text-center mt-4">
+                    <button type="button" (click)="logout()" class="btn-danger btn btn-sm">Cerrar sesión</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Datos formulario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 d-block">
+                        <span class="p-2">Nombre del formulario</span> <br>
+                        <input type="text" placeholder="Ingresa el nombre del formulario" class="form-control mt-1" [(ngModel)]="strNombreFormulario">
+                    </div>
+                </div>
+                <br>
+                <div class="row"></div>
+                <div class="col-12 d-block">
+                    <span class="p-2">Estatus</span> <br>
+                    <select class="form-control mt-1" [(ngModel)]="strEstatus">
+                        <option value="" disabled selected>Selecciona un estatus</option>
+                        <option value="alta">Alta</option>
+                        <option value="baja">Baja</option>
+                    </select>
+                </div>
+                <br>
+                <div class="row"></div>
+                <div class="col-12 d-block">
+                    <span class="p-2">URL</span> <br>
+                    <input type="url" placeholder="URL" class="form-control mt-1" [(ngModel)]="strUrl">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" (click)="fnInsertFormulario()" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

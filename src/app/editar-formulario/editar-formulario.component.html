@@ -1,0 +1,15 @@
+<div class="container">
+    <h2>Editar Formulario</h2>
+
+    <form (ngSubmit)="guardarCambios()">
+        <div *ngFor="let pregunta of formularioActual.preguntas; let i = index" class="mb-3">
+            <label for="pregunta{{i}}" class="form-label">Pregunta {{i + 1}}</label>
+            <input type="text" class="form-control" id="pregunta{{i}}" [(ngModel)]="pregunta.texto" name="pregunta{{i}}" required>
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-success">Guardar Cambios</button>
+            <button type="button" (click)="cancelar()" class="btn btn-secondary">Cancelar</button>
+        </div>
+    </form>
+</div>
