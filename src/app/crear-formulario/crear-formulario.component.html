@@ -9,9 +9,9 @@
                         </div>
                     </div>
 
-                    <h2 class="text-center mb-4 sticky-top bg-white">Crear Formulario</h2>
+                    <h2 class="text-center mb-4 sticky-top bg-white">Formulario</h2>
 
-                    <form [formGroup]="formularioForm" (ngSubmit)="onSubmit()">
+                    <form [formGroup]="formularioForm" (ngSubmit)="fnonSubmit(strintIDFormulario)">
                         <div id="preguntas-container">
                             <div *ngFor="let pregunta of preguntas.controls; let i = index" [formGroupName]="i" class="mb-3 p-3 bg-light border rounded">
                                 <input type="text" formControlName="pregunta" placeholder="Ingrese la pregunta" class="form-control mb-2" required>
@@ -24,9 +24,9 @@
                             </div>
                         </div>
                         <div class="form-group mt-3">
-                            <button type="button" class="btn btn-primary" (click)="agregarPregunta()">Agregar Pregunta</button>
+                            <button type="button" class="btn btn-primary btn-sm" (click)="agregarPregunta()">Agregar Pregunta</button>
                             <div class="form-group mt-3">
-                                <button type="submit" class="btn btn-success" [disabled]="formularioForm.invalid">Enviar formulario</button>
+                                <button type="submit" class="btn btn-success btn-sm" [disabled]="formularioForm.invalid">Enviar formulario</button>
                             </div>
                             <a routerLink="/opciones" class="btn btn-link">Volver</a>
                         </div>

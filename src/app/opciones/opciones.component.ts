@@ -9,10 +9,12 @@ import { PreguntaService } from '../pregunta.service';
 export class OpcionesComponent implements OnInit {
   formularios: any[] = [];
   messages: string[] = [];
-  public strUsuario: string = "";
-  public strUrl: string = "";
-  public strNombreFormulario = "";
-  public strEstatus= "";
+  public strUsuario: any = "";
+  public strUrl: any = "";
+  public strNombreFormulario: any = "";
+  public strEstatus: any = "";
+  public strFechaCreacion: any = "";
+  public intIDFormulario: any = "";
 
   constructor(private preguntaService: PreguntaService, private router: Router) {}
 
@@ -68,9 +70,33 @@ export class OpcionesComponent implements OnInit {
     this.preguntaService.sp_Form_vic({
       strAccion: 'INSERT_FORMULARIO', 
       strUsuario: 'JGuzman',
+      strFechaCreacion: this.strFechaCreacion,
       strNombreFormulario: this.strNombreFormulario,
       strEstatus: this.strEstatus,
       strUrl: this.strUrl
+    }).subscribe(
+      result => {
+        this.fnGetFormulario()
+        console.log(result); 
+
+        this.strNombreFormulario = "";
+        this.strEstatus = "";
+        this.strUrl = "";
+      },
+      error => {
+        var error = <any>error;
+        console.log(error);
+      }
+    );
+  }
+
+  fnChangeEstatus(estatus: any, id: any) {
+    console.log(id)
+    estatus = (estatus == 'alta')? 'baja': 'alta'
+    this.preguntaService.sp_Form_vic({
+      strAccion: 'CAMBIAR_ESTATUS_FORM', 
+      strEstatus: estatus,
+      intIDFormulario: id,
     }).subscribe(
       result => {
         this.fnGetFormulario()
@@ -98,6 +124,24 @@ export class OpcionesComponent implements OnInit {
       }
     );
   }
+
+  fnDeleteForm(id: any) {
+   
+    this.preguntaService.sp_Form_vic({
+      strAccion: 'BORRAR_FORMULARIO', 
+      intIDFormulario: id, 
+    }).subscribe(
+      result => {
+        this.fnGetFormulario()
+        console.log(result)
+      },
+      error => {
+        var error = <any>error;
+        console.log(error);
+      }
+    );
+  }
+
 
   logout(): void {
     this.router.navigate(['/login']);

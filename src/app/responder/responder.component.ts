@@ -9,24 +9,31 @@ import { PreguntaService } from '../pregunta.service';
 })
 export class ResponderComponent implements OnInit {
   formularioForm: FormGroup;
-  questions: any[] = [];
   messages: { text: string, category: string }[] = [];
+  
+  questions: any[] = []; 
 
   constructor(private fb: FormBuilder, private preguntaService: PreguntaService) {
     this.formularioForm = this.fb.group({
-      respuestas: this.fb.array([])
+      respuestas: this.fb.array([]) 
     });
   }
 
   ngOnInit() {
-
+    this.preguntaService.formularios$.subscribe(formularios => {
+      if (formularios.length) {
+        const lastFormulario = formularios[formularios.length - 1]; 
+        this.questions = lastFormulario.preguntas; 
+        this.initializeForm(); 
+      }
+    });
   }
 
   initializeForm() {
     const respuestas = this.fb.array(
       this.questions.map(question => this.fb.group({
-        pregunta: [question.pregunta],  
-        respuesta: ['']                    
+        pregunta: [question.strPregunta], 
+        respuesta: [''] 
       }))
     );
     this.formularioForm.setControl('respuestas', respuestas);
