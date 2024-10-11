@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'crear-usuario', component: CrearUsuarioComponent },
   { path: 'opciones', component: OpcionesComponent },
-  { path: 'crear-formulario', component: CrearFormularioComponent},
+  { path: 'crear-formulario/:id', component: CrearFormularioComponent},
   { path: 'responder', component: ResponderComponent},
   { path: 'visualizar-respuesta', component: VisualizarRespuestaComponent},
   { path: 'editar-formulario', component: EditarFormularioComponent },

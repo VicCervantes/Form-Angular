@@ -7,7 +7,7 @@ import { PreguntaService } from '../pregunta.service';
   templateUrl: './opciones.component.html',
 })
 export class OpcionesComponent implements OnInit {
-  formularios: any[] = [];
+  formularios: any = [];
   messages: string[] = [];
   public strUsuario: any = "";
   public strUrl: any = "";
@@ -23,16 +23,15 @@ export class OpcionesComponent implements OnInit {
     this.preguntaService.formularios$.subscribe(data => {
       this.formularios = data.map(formulario => ({
         ...formulario,
-        activo: formulario.activo !== undefined ? formulario.activo : true, // Por defecto, activo es true si no está definido
-        estatus: formulario.activo ? 'Activo' : 'Baja' // Inicializa el estatus acorde al estado activo
+        activo: formulario.activo !== undefined ? formulario.activo : true,
+        estatus: formulario.activo ? 'Activo' : 'Baja' 
       }));
     });
   }
 
-  // Lógica para cambiar el estatus del formulario al marcar/desmarcar el checkbox
   toggleStatus(formulario: any) {
     formulario.activo = !formulario.activo;
-    formulario.estatus = formulario.activo ? 'Activo' : 'Baja'; // Cambia el estatus acorde al estado activo
+    formulario.estatus = formulario.activo ? 'Activo' : 'Baja'; 
   }
 
   addMessage(message: string) {
@@ -49,13 +48,16 @@ export class OpcionesComponent implements OnInit {
     }
   }
 
+  fnPreguntas(id: number) {
+    this.router.navigate(['/crear-formulario', id]);
+  }
+
   compartirFormulario(formularioId: string) {
     const url = `${window.location.origin}/responder/${formularioId}`;
     this.copiarAlPortapapeles(url);
     alert('Enlace copiado: ' + url);
   }
 
-  // Función para copiar el texto al portapapeles
   copiarAlPortapapeles(text: string) {
     const input = document.createElement('textarea');
     input.value = text;
@@ -65,8 +67,7 @@ export class OpcionesComponent implements OnInit {
     document.body.removeChild(input);
   }
   
-  fnInsertFormulario() {
-   
+ fnInsertFormulario() { 
     this.preguntaService.sp_Form_vic({
       strAccion: 'INSERT_FORMULARIO', 
       strUsuario: 'JGuzman',

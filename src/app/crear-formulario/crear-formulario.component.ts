@@ -1,25 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { PreguntaService } from '../pregunta.service'; 
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-crear-formulario',
   templateUrl: './crear-formulario.component.html',
-})
-export class CrearFormularioComponent implements OnInit {
-  formularioForm: FormGroup;
-  messages: string[] = [];
-  public strEstatus: any = "";
+  })
+  export class CrearFormularioComponent implements OnInit {
+    formularioForm: FormGroup;
+    messages: string[] = [];
+
+  public  strEstatus: any = "";
   public strintIDFormulario: any = "";
   public strUrl: any = "";
   public strNombreFormulario: any = "";
 
-  constructor(private fb: FormBuilder, private preguntaService: PreguntaService) { 
-    this.formularioForm = this.fb.group({
-      nombre: [''], 
-      estatus: ['Activo'], 
-      preguntas: this.fb.array([]),
-    });
+  constructor(private fb: FormBuilder, private preguntaService: PreguntaService, public route: ActivatedRoute) { 
+  this.formularioForm = this.fb.group({
+    nombre: [''], 
+    estatus: [''], 
+    preguntas: this.fb.array([]),
+  });
+    this.strintIDFormulario = this.route.snapshot.paramMap.get("id");
   }
 
   ngOnInit(): void {
@@ -31,20 +34,17 @@ export class CrearFormularioComponent implements OnInit {
   }
 
   fngetPreguntas() {
-    this.preguntaService.sp_Form_vic({ strAccion: 'getPreguntas' }).subscribe(
-      result => {
-        result.forEach((pregunta: any) => {
-          const preguntaGroup = this.fb.group({
-            pregunta: [pregunta.texto || ''], 
-            tipo: [pregunta.tipo || ''] 
-          });
-          this.preguntas.push(preguntaGroup);
-        });
-      },
+    this.preguntaService.sp_Form_vic({
+    strAccion: 'GET_PREGUNTAS',
+    intIDFormulario: this.strintIDFormulario
+    }).subscribe((data: any) => {
+     console.log(data)
+    },
       error => {
-        console.error('Error al obtener preguntas:', error);
+        var error = <any>error;
+        console.log(error);
       }
-    );
+    )
   }
 
   agregarPregunta() {
@@ -59,40 +59,29 @@ export class CrearFormularioComponent implements OnInit {
     this.preguntas.removeAt(index);
   }
 
-  fnonSubmit(id: any) {
+  fnonSubmit(id: number) {
     const formularioData = {
       strAccion: 'crearFormulario', 
       strUsuario: 'JGuzman', 
       strNombreFormulario: this.strNombreFormulario,
       strEstatus: this.strEstatus,
       strUrl: this.strUrl,
-      preguntas: this.preguntas.controls.map((p) => ({
-        strPregunta: p.get('pregunta')?.value,
-        strTipo: p.get('tipo')?.value,
+      preguntas: this.preguntas.value.map((p: any) => ({
+        strPregunta: p.pregunta,
+        strTipo: p.tipo,
         intIDFormulario: id,
       })),
     };
 
     this.preguntaService.agregarFormulario(formularioData).subscribe(
       response => {
-        this.preguntaService.agregarFormulario(formularioData); 
         this.addMessage('Formulario creado exitosamente');
-        this.resetFormulario();
       },
       error => {
         console.error('Error al crear formulario:', error);
         this.addMessage('Error al crear el formulario.');
       }
     );
-}
-
-
-
-  resetFormulario(): void {
-    this.formularioForm.reset();
-    while (this.preguntas.length) {
-      this.preguntas.removeAt(0);
-    }
   }
 
   addMessage(message: string) {
