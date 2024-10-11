@@ -43,7 +43,7 @@
                                     <button class="btn btn-sm btn-danger" *ngIf="formulario.strEstatus == 'alta'" (click)="fnChangeEstatus('alta', formulario.intIDFormulario)">Baja</button>
                                 </td>
                                 <td>
-                                    <button *ngIf="formulario.strEstatus !== 'alta'" (click)="fnPreguntas(formulario.intIDFormulario)" class="bi bi-pencil btn-sm"></button>
+                                    <button *ngIf="formulario.strEstatus !== 'alta'" (click)="fnPreguntas(formulario.intIDFormulario)" class="bi bi-pencil btn-sm">?</button>
                                 </td>
                                 <td>
                                     <a *ngIf="formulario.strEstatus !== 'alta '" routerLink="/responder" class="bi bi-pencil-square btn-sm"></a>

@@ -53,7 +53,7 @@ export class OpcionesComponent implements OnInit {
   }
 
   compartirFormulario(formularioId: string) {
-    const url = `${window.location.origin}/responder/${formularioId}`;
+    const url = `${window.location.origin}/responder/${this.intIDFormulario}`;
     this.copiarAlPortapapeles(url);
     alert('Enlace copiado: ' + url);
   }
