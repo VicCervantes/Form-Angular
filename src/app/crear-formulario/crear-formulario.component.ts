@@ -6,10 +6,10 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-crear-formulario',
   templateUrl: './crear-formulario.component.html',
-  })
-  export class CrearFormularioComponent implements OnInit {
-    formularioForm: FormGroup;
-    messages: string[] = [];
+})
+export class CrearFormularioComponent implements OnInit {
+  formularioForm: FormGroup;
+  messages: string[] = [];
 
   public strEstatus: any = "";
   public array: any = [];
@@ -18,11 +18,11 @@ import { ActivatedRoute } from '@angular/router';
   public strNombreFormulario: any = "";
 
   constructor(private fb: FormBuilder, private preguntaService: PreguntaService, public route: ActivatedRoute) { 
-  this.formularioForm = this.fb.group({
-    nombre: [''], 
-    estatus: [''], 
-    preguntas: this.fb.array([]),
-  });
+    this.formularioForm = this.fb.group({
+      nombre: [''], 
+      estatus: [''], 
+      preguntas: this.fb.array([]),
+    });
     this.strintIDFormulario = this.route.snapshot.paramMap.get("id");
   }
 
@@ -36,23 +36,23 @@ import { ActivatedRoute } from '@angular/router';
 
   fngetPreguntas() {
     this.preguntaService.sp_Form_vic({
-    strAccion: 'GET_PREGUNTAS',
-    intIDFormulario: this.strintIDFormulario
+      strAccion: 'GET_PREGUNTAS',
+      intIDFormulario: this.strintIDFormulario
     }).subscribe((data: any) => {
-     console.log(data)
-     this.array=data
+      console.log(data);
+      this.array = data;
+      this.array.forEach((pregunta: any) => this.agregarPregunta(pregunta)); // Agregar preguntas existentes
     },
-      error => {
-        var error = <any>error;
-        console.log(error);
-      }
-    )
+    error => {
+      console.error('Error fetching preguntas:', error);
+    });
   }
 
-  agregarPregunta() {
+  agregarPregunta(existingPregunta?: any) {
     const preguntaGroup = this.fb.group({
-      pregunta: [''],
-      tipo: ['']
+      pregunta: [existingPregunta ? existingPregunta.strPregunta : ''],
+      tipo: [existingPregunta ? existingPregunta.tipo : ''],
+      opciones: [existingPregunta ? existingPregunta.strOpciones : '']
     });
     this.preguntas.push(preguntaGroup);
   }
@@ -71,6 +71,7 @@ import { ActivatedRoute } from '@angular/router';
       preguntas: this.preguntas.value.map((p: any) => ({
         strPregunta: p.pregunta,
         strTipo: p.tipo,
+        strOpciones: p.tipo === 'multiple' ? p.opciones : null, // Enviar opciones solo si es tipo múltiple
         intIDFormulario: id,
       })),
     };
