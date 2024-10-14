@@ -11,7 +11,8 @@ import { ActivatedRoute } from '@angular/router';
     formularioForm: FormGroup;
     messages: string[] = [];
 
-  public  strEstatus: any = "";
+  public strEstatus: any = "";
+  public array: any = [];
   public strintIDFormulario: any = "";
   public strUrl: any = "";
   public strNombreFormulario: any = "";
@@ -39,6 +40,7 @@ import { ActivatedRoute } from '@angular/router';
     intIDFormulario: this.strintIDFormulario
     }).subscribe((data: any) => {
      console.log(data)
+     this.array=data
     },
       error => {
         var error = <any>error;

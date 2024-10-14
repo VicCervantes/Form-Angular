@@ -27,6 +27,6 @@ export class EditarFormularioComponent implements OnInit {
   }
 
   cancelar() {
-    this.router.navigate(['/opciones']); // Redirige de vuelta a opciones
+    this.router.navigate(['/opciones']); 
   }
 }

@@ -13,12 +13,13 @@
 
                     <form [formGroup]="formularioForm" (ngSubmit)="fnonSubmit(strintIDFormulario)">
                         <div id="preguntas-container">
-                            <div *ngFor="let pregunta of preguntas.controls; let i = index" [formGroupName]="i" class="mb-3 p-3 bg-light border rounded">
-                                <input type="text" formControlName="pregunta" placeholder="Ingresa la pregunta" class="form-control mb-2" required>
+                            <div *ngFor="let pregunta of array; let i = index" [formGroupName]="i" class="mb-3 p-3 bg-light border rounded">
+                                <input type="text" formControlName="pregunta" placeholder="Ingresa la pregunta" class="form-control mb-2" [value]="pregunta.strPregunta" required>
                                 <select formControlName="tipo" class="form-select form-select-sm mb-2" aria-label="Tipo de pregunta" required>
                                     <option value disabled selected>Elige una opción</option>
                                     <option value="texto">Texto</option>
-                                    <option value="multiple">Opción múltiple (Si,No)</option>
+                                    <option value="multiple">Opción múltiple</option>
+                                    
                                 </select>
                                 <button type="button" class="btn btn-danger btn-sm" (click)="eliminarPregunta(i)">Eliminar Pregunta</button>
                             </div>
